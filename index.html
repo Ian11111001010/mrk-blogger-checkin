@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Отметка визита блогера | MRK Parfum Club</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 450px;
+      width: 100%;
+      padding: 40px 30px;
+      animation: slideUp 0.5s ease-out;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1C1C1C;
+      letter-spacing: 1px;
+    }
+    
+    .logo-subtitle {
+      font-size: 12px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 5px;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #1C1C1C;
+      font-size: 22px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+    
+    .blogger-card {
+      background: #F8F9FA;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border: 1px solid #E5E5E5;
+    }
+    
+    .blogger-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .blogger-row:last-child {
+      margin-bottom: 0;
+    }
+    
+    .blogger-label {
+      color: #999;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .blogger-value {
+      color: #1C1C1C;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: right;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-waiting {
+      background: #FFF3CD;
+      color: #856404;
+    }
+    
+    .status-visited {
+      background: #D4EDDA;
+      color: #155724;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    label {
+      display: block;
+      color: #1C1C1C;
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    input {
+      width: 100%;
+      padding: 16px 20px;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-align: center;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      color: #1C1C1C;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #FF6B35;
+      box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+    }
+    
+    input::placeholder {
+      color: #CCC;
+      letter-spacing: 1px;
+    }
+    
+    .button {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+    }
+    
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(255, 107, 53, 0.4);
+    }
+    
+    .button:active {
+      transform: translateY(0);
+    }
+    
+    .button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+    
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #FF6B35;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .error {
+      background: #F8D7DA;
+      color: #721C24;
+      padding: 15px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #F5C6CB;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+    }
+    
+    .success-screen {
+      text-align: center;
+      padding: 20px 0;
+    }
+    
+    .success-icon {
+      font-size: 70px;
+      margin-bottom: 20px;
+      animation: scaleIn 0.5s ease-out;
+    }
+    
+    @keyframes scaleIn {
+      from {
+        transform: scale(0);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+    
+    .success-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: #155724;
+      margin-bottom: 25px;
+    }
+    
+    .success-info {
+      background: #F8F9FA;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .instruction {
+      text-align: center;
+      color: #999;
+      font-size: 13px;
+      margin-top: 15px;
+      line-height: 1.5;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #E5E5E5;
+      color: #999;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div>Загрузка...</div>
+    </div>
+  </div>
+
+  <script>
+    // ВАЖНО: Замените на ваш реальный API URL!
+    const API_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+    
+    const app = document.getElementById('app');
+    const loading = document.getElementById('loading');
+    
+    // Получаем ID из URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const bloggerId = urlParams.get('id');
+    
+    if (!bloggerId) {
+      showError('Ошибка: неверная ссылка. ID блогера не найден.');
+    } else {
+      loadBloggerInfo();
+    }
+    
+    async function loadBloggerInfo() {
+      try {
+        const response = await fetch(`${API_URL}?action=getBlogger&id=${bloggerId}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          showForm(result.data);
+        } else {
+          showError(result.error || 'Блогер не найден');
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки:', error);
+        showError('Ошибка подключения к серверу. Попробуйте позже.');
+      }
+    }
+    
+    function showForm(blogger) {
+      app.innerHTML = `
+        <div class="logo">
+          <div class="logo-text">MRK</div>
+          <div class="logo-subtitle">Parfum Club</div>
+        </div>
+        
+        <h1>Отметка визита</h1>
+        <p class="subtitle">Подтвердите посещение блогера</p>
+        
+        <div class="blogger-card">
+          <div class="blogger-row">
+            <span class="blogger-label">Блогер</span>
+            <span class="blogger-value">${blogger.name}</span>
+          </div>
+          <div class="blogger-row">
+            <span class="blogger-label">Город</span>
+            <span class="blogger-value">${blogger.city}</span>
+          </div>
+          <div class="blogger-row">
+            <span class="blogger-label">Бутик</span>
+            <span class="blogger-value">${blogger.boutique}</span>
+          </div>
+          ${blogger.instagram ? `
+          <div class="blogger-row">
+            <span class="blogger-label">Instagram</span>
+            <span class="blogger-value">@${blogger.instagram}</span>
+          </div>
+          ` : ''}
+          <div class="blogger-row">
+            <span class="blogger-label">Статус</span>
+            <span class="blogger-value">
+              <span class="status-badge ${blogger.status === 'Был в бутике' ? 'status-visited' : 'status-waiting'}">
+                ${blogger.status}
+              </span>
+            </span>
+          </div>
+        </div>
+        
+        <div id="errorMessage"></div>
+        
+        <form id="confirmForm">
+          <div class="form-group">
+            <label for="code">Код вашего бутика:</label>
+            <input 
+              type="text" 
+              id="code" 
+              name="code" 
+              placeholder="Например: MSK01"
+              required
+              autocomplete="off"
+              autofocus
+            >
+            <div class="instruction">
+              Введите код вашего бутика и нажмите кнопку
+            </div>
+          </div>
+          
+          <button type="submit" class="button" id="submitBtn">
+            ✓ Подтвердить визит
+          </button>
+        </form>
+        
+        <div class="footer">
+          © 2025 MRK Parfum Club
+        </div>
+      `;
+      
+      const form = document.getElementById('confirmForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const errorMessage = document.getElementById('errorMessage');
+      const codeInput = document.getElementById('code');
+      
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const code = codeInput.value.trim().toUpperCase();
+        
+        if (!code) {
+          showErrorMessage('Пожалуйста, введите код бутика');
+          return;
+        }
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Отправка...';
+        errorMessage.innerHTML = '';
+        
+        try {
+          // Используем GET для простоты (обход CORS)
+          const response = await fetch(`${API_URL}?action=confirmVisit&id=${bloggerId}&code=${encodeURIComponent(code)}`);
+          const result = await response.json();
+          
+          if (result.success) {
+            showSuccess(result.data);
+          } else {
+            showErrorMessage(result.error || 'Ошибка при подтверждении');
+            submitBtn.disabled = false;
+            submitBtn.textContent = '✓ Подтвердить визит';
+          }
+        } catch (error) {
+          console.error('Ошибка:', error);
+          showErrorMessage('Ошибка подключения. Попробуйте ещё раз.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = '✓ Подтвердить визит';
+        }
+      });
+      
+      function showErrorMessage(message) {
+        errorMessage.innerHTML = `<div class="error">${message}</div>`;
+      }
+    }
+    
+    function showSuccess(data) {
+      app.innerHTML = `
+        <div class="logo">
+          <div class="logo-text">MRK</div>
+          <div class="logo-subtitle">Parfum Club</div>
+        </div>
+        
+        <div class="success-screen">
+          <div class="success-icon">✅</div>
+          <h1 class="success-title">Визит отмечен!</h1>
+          
+          <div class="success-info">
+            <div class="blogger-row">
+              <span class="blogger-label">Блогер</span>
+              <span class="blogger-value">${data.blogger}</span>
+            </div>
+            <div class="blogger-row">
+              <span class="blogger-label">Бутик</span>
+              <span class="blogger-value">${data.boutique}</span>
+            </div>
+            <div class="blogger-row">
+              <span class="blogger-label">Дата</span>
+              <span class="blogger-value">${data.date}</span>
+            </div>
+            <div class="blogger-row">
+              <span class="blogger-label">Время</span>
+              <span class="blogger-value">${data.time}</span>
+            </div>
+            <div class="blogger-row">
+              <span class="blogger-label">Код бутика</span>
+              <span class="blogger-value">${data.code}</span>
+            </div>
+          </div>
+          
+          <div class="instruction">
+            Спасибо! Информация сохранена в системе.
+          </div>
+        </div>
+        
+        <div class="footer">
+          © 2025 MRK Parfum Club
+        </div>
+      `;
+    }
+    
+    function showError(message) {
+      app.innerHTML = `
+        <div class="logo">
+          <div class="logo-text">MRK</div>
+          <div class="logo-subtitle">Parfum Club</div>
+        </div>
+        
+        <div class="error" style="margin-top: 20px;">
+          ${message}
+        </div>
+        
+        <div class="footer" style="margin-top: 30px;">
+          © 2025 MRK Parfum Club
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
